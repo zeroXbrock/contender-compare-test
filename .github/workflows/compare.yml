@@ -11,11 +11,42 @@ jobs:
   contender-compare:
     runs-on: ubuntu-latest
     steps:
-      
+      - name: Set up Rust
+        uses: actions-rust-lang/setup-rust-toolchain@v1
+
+      - name: Install build dependencies
+        run: sudo apt-get update && sudo apt-get install -y build-essential pkg-config libssl-dev clang cmake
+
+      - name: Create bin directory
+        run: mkdir -p bin
+
+      - name: Build reth (main)
+        run: |
+          git clone --depth 1 --branch main https://github.com/paradigmxyz/reth.git reth-main-src
+          cd reth-main-src
+          cargo build --release
+          cp target/release/reth ../bin/reth-main
+
+      - name: Build reth (dev)
+        run: |
+          git clone --depth 1 --branch 'v1.11.0' https://github.com/paradigmxyz/reth.git reth-dev-src
+          cd reth-dev-src
+          cargo build --release
+          cp target/release/reth ../bin/reth-dev
+
+      - name: Build contender
+        run: |
+          git clone --depth 1 https://github.com/zeroXbrock/contender.git contender-src
+          cd contender-src
+          cargo build --release
+          cp target/release/contender ../bin/contender
+
       - uses: actions/checkout@v3
       - name: Run contender-compare
         uses: zeroXbrock/contender-compare@main
         with:
           contender_bin: ./bin/contender
-          binary_main: ./bin/reth-main
-          binary_pr: ./bin/reth-dev
+          node_main_bin: ./bin/reth-main
+          node_main_args: node --dev --http -d
+          node_pr_bin: ./bin/reth-dev
+          node_pr_args: node --dev --http -d --http.port 9545
