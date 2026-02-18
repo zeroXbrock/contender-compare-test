@@ -1,0 +1,21 @@
+name: Compare
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+jobs:
+  contender-compare:
+    runs-on: ubuntu-latest
+    steps:
+      
+      - uses: actions/checkout@v3
+      - name: Run contender-compare
+        uses: zeroXbrock/contender-compare@main
+        with:
+          contender_bin: ./bin/contender
+          binary_main: ./bin/reth-main
+          binary_pr: ./bin/reth-dev
