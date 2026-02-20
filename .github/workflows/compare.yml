@@ -34,7 +34,7 @@ jobs:
       - name: Run contender-compare
         uses: zeroXbrock/contender-compare@main
         with:
-          contender_bin_main: ./bin/contender
+          # contender_bin_main: ./bin/contender
           contender_spam_args: --tps 20 -d 7 erc20
           node_bin_main: ./bin/reth-main
           node_args_main: node --dev --http -d
