@@ -19,12 +19,11 @@ jobs:
   contender-compare:
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v3
       - name: Create bin directory
         run: mkdir -p bin
       - name: wtf
         run: ls -l
-
-      - uses: actions/checkout@v3
 
       - name: Build reth (main)
         run: |
