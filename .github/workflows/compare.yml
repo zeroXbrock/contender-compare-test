@@ -21,6 +21,8 @@ jobs:
     steps:
       - name: Create bin directory
         run: mkdir -p bin
+      - name: wtf
+        run: ls -l
 
       - uses: actions/checkout@v3
 
