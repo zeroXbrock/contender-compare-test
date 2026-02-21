@@ -7,6 +7,11 @@ on:
     branches: [ "main" ]
   workflow_dispatch:
 
+# NOTE: these permissions are needed for contender-compare to update PRs with a summary when it finishes running its reports
+permissions:
+  pull-requests: write
+  contents: read
+
 env:
   FOUNDRY_PROFILE: ci
 
@@ -32,9 +37,9 @@ jobs:
           cp contender_x86-64 ./bin/contender
 
       - name: Run contender-compare
-        uses: zeroXbrock/contender-compare@main
+        uses: zeroXbrock/contender-compare@feat/report-summaries
         with:
-          # contender_bin_main: ./bin/contender
+          contender_bin_main: ./bin/contender
           contender_spam_args: --tps 20 -d 7 erc20
           node_bin_main: ./bin/reth-main
           node_args_main: node --dev --http -d
