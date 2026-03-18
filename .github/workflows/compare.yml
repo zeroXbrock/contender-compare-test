@@ -43,6 +43,17 @@ jobs:
           contender_bin_main: ./bin/contender
           contender_spam_args: --tps 200 -d 30 -a 10 erc20
           node_bin_main: ./bin/reth-main
-          node_args_main: node --dev --http -d --http.api debug,eth,trace,flashbots
+          node_args_main: |
+            node --dev --http -d \
+            --http.api debug,eth,trace,flashbots \
+            --txpool.pending-limit 100000 \
+            --txpool.queued-limit 100000 \
+            --txpool.basefee-limit 100000 \
+            --txpool.blob-limit 10000
           node_bin_pr: ./bin/reth-dev
-          node_args_pr: node --dev --http -d --http.port 9545 --http.api debug,eth,trace,flashbots
+          node_args_pr: node --dev --http -d --http.port 9545 \
+            --http.api debug,eth,trace,flashbots \
+            --txpool.pending-limit 100000 \
+            --txpool.queued-limit 100000 \
+            --txpool.basefee-limit 100000 \
+            --txpool.blob-limit 10000
