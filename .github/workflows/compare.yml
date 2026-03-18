@@ -14,6 +14,16 @@ permissions:
 
 env:
   FOUNDRY_PROFILE: ci
+  NODE_COMMON_ARGS: >-
+    --dev --http -d
+    --dev.block-time 1s
+    --http.api debug,eth,trace
+    --txpool.disable-transactions-backup
+    --txpool.basefee-max-count 100000
+    --txpool.blobpool-max-count 10000
+    --txpool.pending-max-count 100000
+    --txpool.queued-max-count 100000
+    --txpool.max-batch-size 100
 
 jobs:
   contender-compare:
@@ -44,16 +54,6 @@ jobs:
           contender_spam_args: --tps 100 -d 42 -a 10 erc20
           node_bin_main: ./bin/reth-main
           node_args_main: |
-            node --dev --http -d --dev.block-time 1s
-            --http.api debug,eth,trace
-            --txpool.pending-max-count 100000
-            --txpool.queued-max-count 100000
-            --txpool.blobpool-max-count 10000
-            --txpool.max-batch-size 100
+            node --http.port 8545 ${{ env.NODE_COMMON_ARGS }}
           node_bin_pr: ./bin/reth-dev
-          node_args_pr: node --dev --http -d --dev.block-time 1s --http.port 9545
-            --http.api debug,eth,trace
-            --txpool.pending-max-count 100000
-            --txpool.queued-max-count 100000
-            --txpool.blobpool-max-count 10000
-            --txpool.max-batch-size 100
+          node_args_pr: node --http.port 9545 ${{ env.NODE_COMMON_ARGS }}
