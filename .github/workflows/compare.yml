@@ -41,7 +41,7 @@ jobs:
         uses: zeroXbrock/contender-compare@feat/report-summaries
         with:
           contender_bin_main: ./bin/contender
-          contender_spam_args: --tps 100 -d 60 -a 10 erc20
+          contender_spam_args: --tps 100 -d 42 -a 10 erc20
           node_bin_main: ./bin/reth-main
           node_args_main: |
             node --dev --http -d --dev.block-time 1s
