@@ -47,13 +47,13 @@ jobs:
             node --dev --http -d
             --http.api debug,eth,trace,flashbots
             --txpool.pending-max-count 100000
-            --txpool.queued-limit 100000
-            --txpool.basefee-limit 100000
-            --txpool.blob-limit 10000
+            --txpool.queued-max-count 100000
+            --txpool.blobpool-max-count 10000
+            --txpool.max-batch-size 100
           node_bin_pr: ./bin/reth-dev
           node_args_pr: node --dev --http -d --http.port 9545
             --http.api debug,eth,trace,flashbots
             --txpool.pending-max-count 100000
-            --txpool.queued-limit 100000
-            --txpool.basefee-limit 100000
-            --txpool.blob-limit 10000
+            --txpool.queued-max-count 100000
+            --txpool.blobpool-max-count 10000
+            --txpool.max-batch-size 100
