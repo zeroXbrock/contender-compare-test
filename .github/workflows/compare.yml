@@ -1,8 +1,6 @@
 name: Compare
 
 on:
-  push:
-    branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
   workflow_dispatch:
@@ -49,10 +47,10 @@ jobs:
           cp contender_x86-64 ./bin/contender
 
       - name: Run contender-compare
-        uses: zeroXbrock/contender-compare@feat/report-summaries
+        uses: zeroXbrock/contender-compare@main
         with:
           contender_bin_main: ./bin/contender
-          contender_spam_args: --tps 100 -d 42 -a 10 erc20
+          contender_spam_args: --tps 100 -d 30 -a 10 erc20
           node_bin_main: ./bin/reth-main
           node_args_main: |
             node --http.port 8545 --datadir /tmp/data-main ${{ env.NODE_COMMON_ARGS }}
