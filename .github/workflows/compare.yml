@@ -47,7 +47,7 @@ jobs:
           cp contender_x86-64 ./bin/contender
 
       - name: Run contender-compare
-        uses: zeroXbrock/contender-compare@feat/report-summaries
+        uses: zeroXbrock/contender-compare@main
         with:
           contender_bin_main: ./bin/contender
           contender_spam_args: --tps 100 -d 30 -a 10 erc20
