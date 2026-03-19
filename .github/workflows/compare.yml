@@ -23,7 +23,9 @@ env:
     --txpool.blobpool-max-count 10000
     --txpool.pending-max-count 100000
     --txpool.queued-max-count 100000
-    --txpool.max-batch-size 100
+    --txpool.max-batch-size 500
+    --txpool.max-new-txns 10000
+    --txpool.max-account-slots 65536
 
 jobs:
   contender-compare:
@@ -54,6 +56,7 @@ jobs:
           contender_spam_args: --tps 100 -d 42 -a 10 erc20
           node_bin_main: ./bin/reth-main
           node_args_main: |
-            node --http.port 8545 ${{ env.NODE_COMMON_ARGS }}
+            node --http.port 8545 --datadir /tmp/data-main ${{ env.NODE_COMMON_ARGS }}
           node_bin_pr: ./bin/reth-dev
-          node_args_pr: node --http.port 9545 ${{ env.NODE_COMMON_ARGS }}
+          node_args_pr: |
+            node --http.port 9545 --datadir /tmp/data-pr ${{ env.NODE_COMMON_ARGS }}
