@@ -7,46 +7,56 @@ on:
     branches: [ "main" ]
   workflow_dispatch:
 
+# NOTE: these permissions are needed for contender-compare to update PRs with a summary when it finishes running its reports
+permissions:
+  pull-requests: write
+  contents: read
+
+env:
+  FOUNDRY_PROFILE: ci
+  NODE_COMMON_ARGS: >-
+    --dev --http -d
+    --dev.block-time 1s
+    --http.api debug,eth,trace
+    --txpool.disable-transactions-backup
+    --txpool.basefee-max-count 100000
+    --txpool.blobpool-max-count 10000
+    --txpool.pending-max-count 100000
+    --txpool.queued-max-count 100000
+    --txpool.max-batch-size 500
+    --txpool.max-new-txns 10000
+    --txpool.max-account-slots 65536
+
 jobs:
   contender-compare:
     runs-on: ubuntu-latest
     steps:
-      - name: Set up Rust
-        uses: actions-rust-lang/setup-rust-toolchain@v1
-
-      - name: Install build dependencies
-        run: sudo apt-get update && sudo apt-get install -y build-essential pkg-config libssl-dev clang cmake
+      - uses: actions/checkout@v3
 
       - name: Create bin directory
         run: mkdir -p bin
 
       - name: Build reth (main)
         run: |
-          git clone --depth 1 --branch main https://github.com/paradigmxyz/reth.git reth-main-src
-          cd reth-main-src
-          cargo build --release
-          cp target/release/reth ../bin/reth-main
+          cp reth_main_x86-64 ./bin/reth-main
 
       - name: Build reth (dev)
         run: |
-          git clone --depth 1 --branch 'v1.11.0' https://github.com/paradigmxyz/reth.git reth-dev-src
-          cd reth-dev-src
-          cargo build --release
-          cp target/release/reth ../bin/reth-dev
+          # cp reth_v1.11.0_x86-64 ./bin/reth-dev
+          cp reth_main_x86-64 ./bin/reth-dev
 
       - name: Build contender
         run: |
-          git clone --depth 1 https://github.com/zeroXbrock/contender.git contender-src
-          cd contender-src
-          cargo build --release
-          cp target/release/contender ../bin/contender
+          cp contender_x86-64 ./bin/contender
 
-      - uses: actions/checkout@v3
       - name: Run contender-compare
-        uses: zeroXbrock/contender-compare@main
+        uses: zeroXbrock/contender-compare@feat/report-summaries
         with:
-          contender_bin: ./bin/contender
-          node_main_bin: ./bin/reth-main
-          node_main_args: node --dev --http -d
-          node_pr_bin: ./bin/reth-dev
-          node_pr_args: node --dev --http -d --http.port 9545
+          contender_bin_main: ./bin/contender
+          contender_spam_args: --tps 100 -d 42 -a 10 erc20
+          node_bin_main: ./bin/reth-main
+          node_args_main: |
+            node --http.port 8545 --datadir /tmp/data-main ${{ env.NODE_COMMON_ARGS }}
+          node_bin_pr: ./bin/reth-dev
+          node_args_pr: |
+            node --http.port 9545 --datadir /tmp/data-pr ${{ env.NODE_COMMON_ARGS }}
