@@ -42,8 +42,7 @@ jobs:
 
       - name: Build reth (dev)
         run: |
-          # cp reth_v1.11.0_x86-64 ./bin/reth-dev
-          cp reth_main_x86-64 ./bin/reth-dev
+          cp reth_v1.11.0_x86-64 ./bin/reth-dev
 
       - name: Build contender
         run: |
