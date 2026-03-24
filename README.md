@@ -1,11 +1,7 @@
 # contender-compare-test
 
-throwaway test repo
+test repo for contender-compare
 
-TODO:
+---
 
-- [ ] add .github/ & workflow with contender-compare action
-- [ ] add node binaries: one that's stable, and one with a change that affects performance
-- [ ] add contender binary
-  - [ ] later: add another contender binary (diff version to show A/B comparison)
-
+preview of what it does: https://github.com/zeroXbrock/contender-compare-test/pull/2
